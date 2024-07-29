@@ -5,14 +5,14 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/link";
 import clsx from "clsx";
-import React, { useState } from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Image } from "@nextui-org/react";
+import React, { useState, useRef } from "react";
+import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 
 import { Providers } from "./providers";
-
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
+import { format } from "path";
 
 // export const metadata: Metadata = {
 //   title: {
@@ -46,13 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [reverseEffect, setReverseEffect] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const listner = () => {
-    const inputValue = (
-      document.getElementById("input-reverse") as HTMLInputElement
-    ).value;
-    const result = reverseFunction(inputValue);
-    setReverseEffect(result);
+    if (inputRef.current) {
+      const result = reverseFunction(inputRef.current.value);
+      setReverseEffect(result);
+    }
   };
 
   return (
@@ -75,7 +75,7 @@ export default function RootLayout({
               <Divider />
               <CardBody className="flex justify-center items-center gap-y-5">
                 <Input
-                  id="input-reverse"
+                  ref={inputRef}
                   isRequired
                   type="text"
                   label="Enter your word:"
